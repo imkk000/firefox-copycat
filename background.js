@@ -32,17 +32,14 @@ browser.browserAction.onClicked.addListener(async () => {
 
 browser.webRequest.onBeforeSendHeaders.addListener(
   (req) => {
-    const headers = req.requestHeaders.filter(({ name }) => {
+    const headers = req.requestHeaders.map(({ name, value }) => {
       switch (name.toLowerCase()) {
-        case "user-agent":
-        case "referer":
         case "cache-control":
-          return false;
+          value = "no-cache";
       }
-      return true;
+      return { name, value };
     });
-    headers.push({ name: "User-Agent", value: "Mozilla/5.0 (Linux) Gecko/20100101 Firefox/139.0" });
-    headers.push({ name: "Cache-Control", value: "no-cache" });
+    console.log(headers);
     return { requestHeaders: headers };
   },
   { urls: ["<all_urls>"] },
