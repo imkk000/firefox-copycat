@@ -1,11 +1,12 @@
 {
   "manifest_version": 2,
   "name": "FFCopycat",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Manage my world",
   "author": "KK",
   "permissions": [
     "<all_urls>",
+    "tabGroups",
     "tabs",
     "webRequest",
     "webRequestBlocking"
@@ -20,9 +21,11 @@
     "default_icon": {
       "512": "icons/icon.png"
     },
-    "default_title": "FFCopycat"
+    "default_title": "FFCopycat",
+    "default_popup": "popup.html"
   },
   "icons": {
     "512": "icons/icon.png"
-  }
+  },
+  "content_security_policy": "default-src 'self'"
 }

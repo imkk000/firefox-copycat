@@ -1,6 +1,9 @@
 {
   "scripts": {
-    "lint": "web-ext lint",
+    "lint": "rg -g '!node_modules' -g '!package.json' 'console.*' || web-ext lint",
     "build": "web-ext build"
+  },
+  "devDependencies": {
+    "web-ext": "^8.7.1"
   }
 }
