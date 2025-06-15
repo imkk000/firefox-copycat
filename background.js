@@ -1,4 +1,10 @@
-const deleteTabGroups = async () => {
+const updateCountTabs = async () => {
+  const tabsCount = await browser.tabs.query({ currentWindow: true });
+  browser.browserAction.setBadgeText({ text: tabsCount.length.toString() });
+  browser.browserAction.setBadgeBackgroundColor({ color: "#FF9800" });
+};
+
+const ungroupTabs = async () => {
   const tabs = await browser.tabs.query({ currentWindow: true });
   await browser.tabs.ungroup(
     tabs.map(({ id }) => {
@@ -7,9 +13,10 @@ const deleteTabGroups = async () => {
   );
 };
 
-const updateTitleTabGroups = async () => {
+const updateTitleGroups = async () => {
   const { id } = await browser.windows.getCurrent();
   const tabGroups = await browser.tabGroups.query({ windowId: id });
+  if (tabGroups.length === 0) return;
   tabGroups.forEach(async ({ id, title }) => {
     const q = await browser.tabs.query({ groupId: id });
     await browser.tabGroups.update(id, {
@@ -19,6 +26,35 @@ const updateTitleTabGroups = async () => {
 };
 
 const sortTabs = async () => {
+  const tabs = await browser.tabs.query({ currentWindow: true });
+  const result = tabs
+    .map(({ id, url }) => {
+      let { hostname, pathname, protocol } = new URL(url);
+      if (hostname.length === 0) hostname = protocol;
+      hostname = hostname.replace(/^www.|/g, "");
+      hostname = hostname.replace(/\.[^.]+$/, "");
+
+      return { id, hostname, pathname };
+    })
+    .sort((a, b) => {
+      if (a.hostname !== b.hostname) {
+        return a.hostname < b.hostname;
+      }
+      if (a.pathname !== b.pathname) {
+        return a.pathname < b.pathname;
+      }
+      return a.id < b.id;
+    })
+    .forEach(async ({ id, pathname }) => {
+      if (pathname == "newtab") {
+        await browser.tabs.remove(id);
+        return;
+      }
+      await browser.tabs.move(id, { index: -1 });
+    });
+};
+
+const groupTabs = async () => {
   const tabGroup = {};
   const hostnames = new Set();
   const tabs = await browser.tabs.query({ currentWindow: true });
@@ -40,7 +76,7 @@ const sortTabs = async () => {
   hostnames.forEach(async (hostname) => {
     const g = tabGroup[hostname];
     const len = g.length;
-    if (len <= 2) {
+    if (len < 2) {
       tabGroup["other"] = tabGroup["other"] || [];
       tabGroup["other"].push(...g);
       hostnames.add("other");
@@ -51,6 +87,7 @@ const sortTabs = async () => {
 
   // ordering
   const sortedHostnames = [...hostnames];
+  // TODO: using storage
   const priority = {
     "github.com": -1,
     "go.dev": 99,
@@ -78,23 +115,30 @@ const sortTabs = async () => {
   });
 };
 
-browser.tabs.onCreated.addListener(updateTitleTabGroups);
-browser.tabs.onRemoved.addListener(updateTitleTabGroups);
-browser.tabs.onUpdated.addListener(updateTitleTabGroups);
-browser.tabs.onMoved.addListener(updateTitleTabGroups);
+const updateWithCountTabs = async () => {
+  updateCountTabs();
+  updateTitleGroups();
+};
 
-browser.tabGroups.onMoved.addListener(updateTitleTabGroups);
-browser.tabGroups.onUpdated.addListener(updateTitleTabGroups);
+browser.tabs.onCreated.addListener(updateWithCountTabs);
+browser.tabs.onRemoved.addListener(updateWithCountTabs);
+browser.tabs.onUpdated.addListener(updateTitleGroups);
+browser.tabs.onMoved.addListener(updateTitleGroups);
 
-browser.runtime.onInstalled.addListener(async () => { });
+browser.tabGroups.onMoved.addListener(updateTitleGroups);
+browser.tabGroups.onUpdated.addListener(updateTitleGroups);
+
+browser.runtime.onStartup.addListener(updateCountTabs);
+browser.runtime.onInstalled.addListener(updateCountTabs);
 browser.runtime.onMessage.addListener(async (message, _) => {
   const { action } = message;
   switch (action) {
-    case "delete":
-      await deleteTabGroups();
-      break;
-    default:
-      await sortTabs();
+    case "sort":
+      return await sortTabs();
+    case "group":
+      return await groupTabs();
+    case "ungroup":
+      return await ungroupTabs();
   }
   return {};
 });

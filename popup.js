@@ -1,11 +1,9 @@
-document.getElementById("sort").addEventListener("click", async () => {
-  await browser.runtime.sendMessage({
-    action: "sort",
-  });
-});
+const buttons = document.getElementsByTagName("p");
 
-document.getElementById("delete").addEventListener("click", async () => {
-  await browser.runtime.sendMessage({
-    action: "delete",
+for (const button of buttons) {
+  button.addEventListener("click", async () => {
+    await browser.runtime.sendMessage({
+      action: button.id,
+    });
   });
-});
+}
