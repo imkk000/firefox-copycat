@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <button class="accordion">Tabs</button>
+  <div class="panel panel-show">
+    <p id="sort">Sort Tabs</p>
+    <p id="group">Group Tabs</p>
+    <p id="ungroup">Ungroup Tabs</p>
+  </div>
+
+  <button class="accordion">Content Injector</button>
+  <div class="panel">
+    <div>
+      <span id="save">Save</span>
+      <span id="sync">Sync</span>
+      <span id="clear">Clear</span>
+    </div>
+
+    <label for="config">config:</label>
+    <textarea id="config" name="config" placeholder="Config JSON"></textarea>
+    <label for="codes">codes:</label>
+    <textarea id="codes" name="codes" placeholder="Content to inject"></textarea>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

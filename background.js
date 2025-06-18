@@ -120,6 +120,20 @@ const updateWithCountTabs = async () => {
   updateTitleGroups();
 };
 
+const syncConfig = async () => {
+  const { token, url } = await browser.storage.local.get();
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github.raw+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+  const result = await response.text();
+  await browser.storage.local.set({ result });
+  return result;
+};
+
 browser.tabs.onCreated.addListener(updateWithCountTabs);
 browser.tabs.onRemoved.addListener(updateWithCountTabs);
 browser.tabs.onUpdated.addListener(updateTitleGroups);
@@ -139,8 +153,17 @@ browser.runtime.onMessage.addListener(async (message, _) => {
       return await groupTabs();
     case "ungroup":
       return await ungroupTabs();
+    case "sync":
+      return await syncConfig();
   }
   return {};
+});
+
+browser.commands.onCommand.addListener(async (command) => {
+  switch (command) {
+    case "sort_tabs":
+      return await sortTabs();
+  }
 });
 
 browser.webRequest.onBeforeSendHeaders.addListener(

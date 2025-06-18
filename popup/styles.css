@@ -1,0 +1,64 @@
+html,
+body {
+  background-color: black;
+  color: #4169e1;
+  font-size: 1em;
+  padding: 0;
+  margin: 0;
+  width: 350px;
+  height: 350px;
+  overflow-x: hidden;
+}
+
+p,
+span {
+  text-align: left;
+  cursor: pointer;
+}
+
+.accordion {
+  background-color: black;
+  cursor: pointer;
+  color: #4169e1;
+  padding: 5px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+.active,
+.accordion:hover {
+  background-color: MidnightBlue;
+}
+
+.panel {
+  padding: 0 10px;
+  display: none;
+  overflow: hidden;
+}
+
+.panel-show {
+  display: block;
+}
+
+.midnight-input {
+  width: 97%;
+  height: 1.5em;
+  background-color: MidnightBlue;
+  color: #4169e1;
+  border: 1px solid #4169e1;
+  font-size: 1rem;
+  outline: none;
+}
+
+textarea {
+  width: 97%;
+  height: 10em;
+  background-color: MidnightBlue;
+  color: #4169e1;
+  border: 1px solid #4169e1;
+  font-size: 1rem;
+  outline: none;
+}
