@@ -121,14 +121,8 @@ const updateWithCountTabs = async () => {
 };
 
 const syncConfig = async () => {
-  const { token, url } = await browser.storage.local.get();
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github.raw+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
+  const { url } = await browser.storage.local.get();
+  const response = await fetch(url);
   const result = await response.text();
   await browser.storage.local.set({ result });
   return result;
@@ -165,18 +159,3 @@ browser.commands.onCommand.addListener(async (command) => {
       return await sortTabs();
   }
 });
-
-browser.webRequest.onBeforeSendHeaders.addListener(
-  (req) => {
-    const headers = req.requestHeaders.map(({ name, value }) => {
-      switch (name.toLowerCase()) {
-        case "cache-control":
-          value = "no-cache";
-      }
-      return { name, value };
-    });
-    return { requestHeaders: headers };
-  },
-  { urls: ["<all_urls>"] },
-  ["blocking", "requestHeaders"],
-);

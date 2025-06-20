@@ -1,7 +1,7 @@
 const buttons = document.getElementsByTagName("p");
 const spans = document.getElementsByTagName("span");
 const accordions = document.getElementsByClassName("accordion");
-const config = document.getElementById("config");
+const configURL = document.getElementById("config-url");
 const codes = document.getElementById("codes");
 
 for (const acc of accordions) {
@@ -28,15 +28,13 @@ for (const span of spans) {
       codes.value = result;
     }
     if (span.id === "save") {
-      const { token, url } = JSON.parse(config.value);
       return await browser.storage.local.set({
-        token,
-        url,
+        url: configURL.value || "",
         result: codes.value,
       });
     }
     if (span.id === "clear") {
-      config.value = "";
+      configURL.value = "";
       codes.value = "";
       return await browser.storage.local.clear();
     }
@@ -44,7 +42,7 @@ for (const span of spans) {
 }
 
 (async () => {
-  const { token, url, result } = await browser.storage.local.get();
-  config.value = JSON.stringify({ token, url }, null, 2) || "{}";
+  const { url, result } = await browser.storage.local.get();
+  configURL.value = url || "";
   codes.value = result || "";
 })();

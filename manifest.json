@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "FFCopycat",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "description": "Manage my world",
   "author": "KK",
   "permissions": [
@@ -10,9 +10,7 @@
     "scripting",
     "storage",
     "tabGroups",
-    "tabs",
-    "webRequest",
-    "webRequestBlocking"
+    "tabs"
   ],
   "background": {
     "scripts": [
@@ -26,10 +24,7 @@
         "<all_urls>"
       ],
       "js": [
-        "injector/script.js"
-      ],
-      "css": [
-        "injector/styles.css"
+        "injector.js"
       ],
       "run_at": "document_end"
     }
@@ -40,18 +35,18 @@
         "default": "Ctrl+Shift+U",
         "mac": "Command+Shift+U"
       },
-      "description": "Sort all tabs"
+      "description": "Sort tabs"
     }
   },
   "browser_action": {
     "default_icon": {
-      "512": "icons/icon.png"
+      "512": "icon.png"
     },
     "default_title": "FFCopycat",
     "default_popup": "popup/index.html"
   },
   "icons": {
-    "512": "icons/icon.png"
+    "512": "icon.png"
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; object-src 'self'"
 }
