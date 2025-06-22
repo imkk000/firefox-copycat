@@ -29,12 +29,10 @@ for (const span of spans) {
     }
     if (span.id === "save") {
       return await browser.storage.local.set({
-        url: configURL.value || "",
         result: codes.value,
       });
     }
     if (span.id === "clear") {
-      configURL.value = "";
       codes.value = "";
       return await browser.storage.local.clear();
     }
@@ -42,7 +40,6 @@ for (const span of spans) {
 }
 
 (async () => {
-  const { url, result } = await browser.storage.local.get();
-  configURL.value = url || "";
+  const { result } = await browser.storage.local.get();
   codes.value = result || "";
 })();

@@ -1,7 +1,7 @@
 {
   "scripts": {
     "lint": "rg -g '!node_modules' -g '!package.json' 'console.*' || web-ext lint",
-    "build": "zip -0 -r dist.zip manifest.json background.js injector.js icon.png popup",
+    "build": "zip -0 -r dist.zip manifest.json *.js icon.png popup",
     "web_build": "web-ext build"
   }
 }

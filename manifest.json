@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "FFCopycat",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "Manage my world",
   "author": "KK",
   "permissions": [
@@ -47,6 +47,5 @@
   },
   "icons": {
     "512": "icon.png"
-  },
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; object-src 'self'"
+  }
 }
