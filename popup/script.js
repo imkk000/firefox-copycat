@@ -1,7 +1,4 @@
-const buttons = document.getElementsByTagName("p");
-const spans = document.getElementsByTagName("span");
 const accordions = document.getElementsByClassName("accordion");
-const configURL = document.getElementById("config-url");
 const codes = document.getElementById("codes");
 
 for (const acc of accordions) {
@@ -11,7 +8,10 @@ for (const acc of accordions) {
   });
 }
 
-for (const button of buttons) {
+const sortButton = document.getElementById("sort");
+const groupButton = document.getElementById("group");
+const ungroupButton = document.getElementById("ungroup");
+for (const button of [sortButton, groupButton, ungroupButton]) {
   button.addEventListener("click", async () => {
     return await browser.runtime.sendMessage({
       action: button.id,
@@ -19,25 +19,23 @@ for (const button of buttons) {
   });
 }
 
-for (const span of spans) {
-  span.addEventListener("click", async () => {
-    if (span.id === "sync") {
-      const result = await browser.runtime.sendMessage({
-        action: span.id,
-      });
-      codes.value = result;
-    }
-    if (span.id === "save") {
-      return await browser.storage.local.set({
-        result: codes.value,
-      });
-    }
-    if (span.id === "clear") {
-      codes.value = "";
-      return await browser.storage.local.clear();
-    }
+document.getElementById("save").addEventListener("click", async () => {
+  return await browser.storage.local.set({
+    result: codes.value,
   });
-}
+});
+
+document.getElementById("sync").addEventListener("click", async () => {
+  const result = await browser.runtime.sendMessage({
+    action: "sync",
+  });
+  codes.value = result;
+});
+
+document.getElementById("clear").addEventListener("click", async () => {
+  codes.value = "";
+  return await browser.storage.local.clear();
+});
 
 (async () => {
   const { result } = await browser.storage.local.get();

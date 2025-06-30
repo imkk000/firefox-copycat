@@ -1,3 +1,4 @@
+const currentVersion = "0.2.8";
 const syncURL = "https://extensions.xcx.sh/downloads?file=config.json";
 
 export const syncConfig = async () => {
