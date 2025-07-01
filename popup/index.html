@@ -8,11 +8,12 @@
 </head>
 
 <body>
-  <button class="accordion">Tabs</button>
+  <button id="tab-acc" class="accordion">Tabs</button>
   <div class="panel panel-show">
     <span id="sort">Sort</span>
     <span id="group">Group</span>
     <span id="ungroup">Ungroup</span>
+    <span id="update-ext">Update</span>
   </div>
 
   <button class="accordion">Content Injector</button>
@@ -27,7 +28,18 @@
     <textarea id="codes" name="codes" placeholder="Content to inject"></textarea>
   </div>
 
-  <script src="script.js"></script>
+  <button class="accordion">Export Cookies</button>
+  <div class="panel">
+    <div>
+      <span id="export-cookies">cookies.txt</span>
+    </div>
+  </div>
+
+  <footer>
+    <span id="status-bar"></span>
+  </footer>
+
+  <script src=" script.js"></script>
 </body>
 
 </html>

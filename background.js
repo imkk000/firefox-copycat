@@ -1,6 +1,8 @@
 import { groupTabs, ungroupTabs, updateTitleGroups } from "./tabGroups.js";
 import { syncConfig } from "./config.js";
 import { sortTabs } from "./tabs.js";
+import { exportCookies } from "./cookies.js";
+import { updateExtension } from "./updater.js";
 
 const updateCountTabs = async () => {
   const tabsCount = await browser.tabs.query({ currentWindow: true });
@@ -39,6 +41,10 @@ browser.runtime.onMessage.addListener(async (message, _) => {
       return await ungroupTabs();
     case "sync":
       return await syncConfig();
+    case "export_cookies":
+      return await exportCookies();
+    case "update_extension":
+      return await updateExtension();
   }
   return {};
 });

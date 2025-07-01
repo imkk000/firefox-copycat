@@ -1,6 +1,9 @@
 const accordions = document.getElementsByClassName("accordion");
 const codes = document.getElementById("codes");
 
+document.getElementById("tab-acc").innerText +=
+  ` (${browser.runtime.getManifest().version})`;
+
 for (const acc of accordions) {
   acc.addEventListener("click", function() {
     this.classList.toggle("active");
@@ -41,3 +44,20 @@ document.getElementById("clear").addEventListener("click", async () => {
   const { result } = await browser.storage.local.get();
   codes.value = result || "";
 })();
+
+document
+  .getElementById("export-cookies")
+  .addEventListener("click", async () => {
+    const cookiesTxt = await browser.runtime.sendMessage({
+      action: "export_cookies",
+    });
+    await navigator.clipboard.writeText(cookiesTxt);
+  });
+
+const statusBar = document.getElementById("status-bar");
+document.getElementById("update-ext").addEventListener("click", async () => {
+  const status = await browser.runtime.sendMessage({
+    action: "update_extension",
+  });
+  statusBar.innerText = status;
+});
